@@ -1,0 +1,31 @@
+WARNING: THIS CRYPTOGRAPHIC SOFTWARE IS NOT SECURE. DO NOT USE IT EXCEPT FOR
+TESTING AND DEMONSTRATION PURPOSES.
+
+This is a simple zero-knowledge proof protocol for an NP-complete language
+written in Sage. The NP-complete language here is quadratic assignment over F_2.
+The two agents interact using the message-passing with objects rather than
+through an explicit channel.
+
+There are many possible improvements to this software:
+
+* Use a cryptographically secure random number generator instead of the Sage and
+Python defaults. Currently the software is insecure because of this.
+
+* Use a channel for interactions instead of object message-passing.
+
+* Quadratic assignment problems that correspond to interesting search problems
+usually have a sparse matrixfor the quadratic forms. Taking advantage of this
+would make the implementation much more efficient.
+
+* Add a system to translate interesting search problems into QA problems.
+
+* Use a salt when hashing for bit-commitment. Everything's better with salt.
+
+* Don't use the Sage pickling system to marshal values into binary form. That's
+just stupid.
+
+* While you're at it, rewrite the whole thing from scratch in a different
+programming language.
+
+However, I have decided not to implement any of these features in the forseeable
+future.

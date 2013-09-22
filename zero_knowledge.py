@@ -6,6 +6,29 @@ WARNING::
     and probably has many security vulnerabilities. In particular, it use sage's
     default random number generator, which probably is not suitable for
     cryptographic use.
+
+Example Usage:
+
+Generate a random set of quadratic equations over `F_2` and a prover for them::
+
+    sage: instance, prover = make_random_instance(20, 10)
+
+(This creates a set of 10 quadratic equations over 20 variables.)
+
+Create an agent to interact with the prover::
+
+    sage: verifier = Verifier(instance)
+
+Conduct the verification protocol once (1/4 chance of catching cheaters).
+
+    sage: verifier.interact_once(prover)
+    True
+
+Repeat the testing protocol 100 times (if the prover is not genuine, it would a
+chance of less than 10^(-12) of getting away):
+
+    sage: verifier.interact(prover, 100)
+    True
 """
 
 import hashlib
@@ -123,13 +146,13 @@ class Verifier(object):
         i = random.randint(0,3)
         if i < 3:
             xi, xim, c, ri = prover.step1(i)
-            return 'hash_sage_object(xi) == hx[i] and \
+            return hash_sage_object(xi) == hx[i] and \
                 hash_sage_object(xim) == hx[i-1] and \
                 hash_sage_object(c) == hc and \
-                hash_sage_object(ri) == hr[i]' and \
-                "xi in self.instance.domain_space and \
-                \ #xim in self.instance.domain_space and \
-                \ #c[0] in self.instance.range_space and " and \
+                hash_sage_object(ri) == hr[i] and \
+                xi in self.instance.domain_space and \
+                xim in self.instance.domain_space and \
+                c[0] in self.instance.range_space and \
                 c[0] + c[1] + c[2] == 0 and \
                 self.instance.partial_map(xi, xim) + c[i] == ri
         else:
